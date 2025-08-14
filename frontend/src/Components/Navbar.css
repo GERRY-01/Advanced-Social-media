@@ -1,0 +1,275 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  padding: 3px 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: blue;
+  margin-right: 20px;
+}
+
+.logo-icon {
+  color: blue;
+  font-size: 1.5rem;
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #e5e5e5;
+  padding: 5px 10px;
+  border-radius: 20px;
+  flex: 1;
+  max-width: 300px;
+  margin-right: 20px;
+}
+
+.search-icon {
+  color: #555;
+  margin-right: 8px;
+  width: 20px;
+}
+
+.search-icon:hover {
+  cursor: pointer;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  background: none;
+  width: 100%;
+  height: 30px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Navigation Icons */
+.nav-icons {
+  display: flex;
+  gap: 30px;
+  margin-right: 70px;
+}
+.nav-icons:hover {
+  cursor: pointer;
+
+}
+
+.nav-item {
+  color: grey;
+  font-size: 1.4rem;
+  padding: 6px 25px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.nav-item:hover {
+  background-color: #d3d3d3;
+  width: fit-content;
+  transform: scale(1.1);
+}
+
+.nav-item.active {
+  color: blue;
+}
+
+/* Profile */
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: auto; 
+  margin-left: 100px; /* small spacing from icons */
+  margin-right: 60px;
+}
+
+.profile-pic {
+  width: 10px;        /* smaller fixed size */
+  height: 10px;       /* smaller fixed size */
+  border-radius: 50%;
+  object-fit: cover;
+}
+.username {
+  font-size: 0.8rem;
+  margin-top: 3px;
+  color: #333;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.hamburger {
+  display: none;
+}
+.top-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1; /* take remaining horizontal space */
+}
+
+/* iPad / medium screens */
+@media (max-width: 1024px) and (min-width: 768px) {
+
+  .navbar {
+    display: flex;
+    align-items: center;
+    padding: 8px 20px;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+    gap: 6px;
+  }
+
+  .logo-icon {
+    font-size: 1.3rem;
+  }
+
+  .search-bar {
+    max-width: 220px;
+    padding: 4px 8px;
+    flex: 1;
+  }
+
+  .search-bar input {
+    font-size: 0.8rem;
+    height: 25px;
+  }
+
+  .nav-row {
+    display: flex;
+    gap: 17px;
+    align-items: center;
+    margin-left: 20px;
+  }
+
+  .nav-item {
+    font-size: 1.2rem;
+    padding: 5px 6px;
+  }
+
+  /* Profile fix */
+  .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 10px;  /* small gap from icons */
+    flex-shrink: 0;
+    gap: 2px;
+  }
+
+  .profile-pic {
+    width: 35px !important;   /* smaller fixed size */
+    height: 35px !important;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .username {
+    font-size: 0.6rem;
+  }
+
+  .hamburger {
+    display: none;
+  }
+}
+
+
+/* Mobile screens */
+@media (max-width: 767px) {
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px 15px;
+  }
+
+  /* Top row: logo + search */
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+    gap: 6px;
+  }
+
+  .logo-icon {
+    font-size: 1.3rem;
+  }
+
+  .search-bar {
+    max-width: 150px;
+    flex: none;
+    padding: 4px 8px;
+  }
+
+  .search-bar input {
+    font-size: 0.8rem;
+    height: 25px;
+  }
+
+  /* Second row: navigation + hamburger */
+   .nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* start icons from left */
+    gap: 10px; /* spacing between icons and hamburger */
+  }
+
+  .nav-icons {
+    display: flex;
+    gap: 15px;
+    flex: 1; /* take remaining space */
+    margin: 0;
+  }
+
+  .nav-item {
+    font-size: 1.3rem;
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+
+  /* Hide profile on mobile */
+  .profile {
+    display: none;
+  }
+
+  /* Hamburger icon */
+ .hamburger {
+    display: block;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: grey;
+    margin-left: 10px; /* space between last icon and hamburger */
+    flex-shrink: 0;    /* prevent shrinking */
+  }
+}
