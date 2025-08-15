@@ -1,0 +1,92 @@
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+/* Post Card Styling */
+.post-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px;
+  max-width: 560px;
+  width: 100%;
+  box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.719);
+}
+
+/* Header: profile picture + name + time */
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.post-profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.post-username {
+  font-weight: bold;
+  display: block;
+}
+
+.post-time {
+  font-size: 12px;
+  color: grey;
+}
+
+/* Caption text */
+.post-caption {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* Post image */
+.post-image {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* Action buttons */
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 5px;
+  border-top: 1px solid #eee;
+}
+
+.post-action {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: grey;
+  cursor: pointer;
+}
+
+.post-icon {
+  color: grey;
+}
+
+/* Tablet/iPad */
+@media (max-width: 1024px) {
+  .post-card {
+    max-width: 440px;
+    margin-left: 30px;
+    width: 300px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .post-card {
+    max-width: 320px;
+  }
+}
