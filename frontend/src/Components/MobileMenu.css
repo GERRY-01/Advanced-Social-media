@@ -1,0 +1,74 @@
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  right: -100%; /* hidden off-screen initially */
+  height: 100%;
+  width: 65%; /* reduced width for mobile */
+  background-color: #f5f9ff; /* soft blue background */
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+  transition: right 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+/* Show menu when open */
+.mobile-menu-overlay.open {
+  right: 0;
+}
+
+/* Close button */
+.close-btn {
+  font-size: 30px;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  cursor: pointer;
+  color: #333;
+}
+
+/* Profile section */
+.profile-section {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+.profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.profile-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #003366;
+}
+
+/* Navigation links */
+.nav-links {
+  list-style: none;
+  padding: 0;
+}
+
+.nav-links li {
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: #004c99; /* blueish text */
+  font-weight: 500;
+}
+
+.nav-links li:hover {
+  background-color: #dcecff; /* light blue hover */
+}
+
+/* Hide on tablet & desktop */
+@media screen and (min-width: 768px) {
+  .mobile-menu-overlay {
+    display: none;
+  }
+}
