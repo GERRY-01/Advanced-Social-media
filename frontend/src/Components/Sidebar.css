@@ -1,0 +1,100 @@
+/* Sidebar.css */
+
+.sidebar {
+  width: 280px; /* increased width */
+  background-color: #f0f0f0; /* greyish background */
+  padding: 60px 20px 20px 20px; /* more top padding */
+  box-sizing: border-box;
+
+  /* Sit below navbar */
+  position: fixed;
+  top: 70px; /* navbar height */
+  left: 0;
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  /* no need for center alignment; left aligned */
+}
+
+.profile-pic {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  margin-right: 15px; /* space between pic and username */
+}
+
+.profile-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  padding: 10px 5px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.nav-links a:hover {
+  background-color: #d9d9d9;
+  color: #007bff; /* blueish on hover */
+}
+
+.nav-links .icon {
+  margin-right: 10px;
+  color: #007bff; /* blueish icon */
+}
+@media (max-width: 1024px) and (min-width: 768px) {
+  .sidebar {
+    width: 200px; /* reduced width */
+    padding: 50px 15px 15px 15px;
+  }
+
+  .profile-pic {
+    width: 45px;
+    height: 45px;
+  }
+
+  .profile-name {
+    font-size: 14px;
+  }
+
+  .nav-links a {
+    padding: 8px 4px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 767px) {
+  .sidebar {
+    display: none;
+  }
+  .profile{
+    display: none;
+  }
+  .profile-pic {
+    display: none;
+  }
+  .profile-name{
+    display: none;
+  }
+}
