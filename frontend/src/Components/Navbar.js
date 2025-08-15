@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import MobileMenu from "./MobileMenu";
 import {
   FaHome,
   FaVideo,
@@ -9,24 +10,31 @@ import {
   FaGlobe
 } from "react-icons/fa";
 import "./Navbar.css";
+import Sidebar from "./Sidebar";
 
 class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: "home" // default active icon
+      active: "home", // default active icon
+      sidebarOpen: false
     };
   }
 
   setActive = (name) => {
     this.setState({ active: name });
   };
+  toggleSidebar = () => {
+    this.setState({ sidebarOpen: !this.state.sidebarOpen });
+  };
 
   render() {
     const { active } = this.state;
 
     return (
+
       <nav className="navbar">
+        <MobileMenu isOpen={this.state.sidebarOpen} toggleMenu={this.toggleSidebar}/>
         {/* Top row: logo + search (mobile) */}
         <div className="top-row">
           <div className="logo">
@@ -74,7 +82,7 @@ class Navbar extends Component {
             </div>
 
             {/* Hamburger as last nav item */}
-            <div className="nav-item hamburger">
+            <div className="nav-item hamburger" onClick={this.toggleSidebar}> 
               &#9776;
             </div>
           </div>
