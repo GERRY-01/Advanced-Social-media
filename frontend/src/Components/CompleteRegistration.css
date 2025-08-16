@@ -42,7 +42,8 @@
   color: #ffd60a;
 }
 
-input, textarea {
+.complete-registration input, #bio {
+  width: 100%;
   padding: 10px;
   border: 2px solid #ccc;
   border-radius: 6px;
