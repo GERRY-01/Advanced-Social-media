@@ -53,6 +53,7 @@ class CompleteRegistration extends Component {
             </label>
             <textarea
               name="bio"
+              id="bio"
               placeholder="Tell us something about yourself..."
               value={this.state.bio}
               onChange={this.handleChange}
@@ -67,6 +68,7 @@ class CompleteRegistration extends Component {
             <input
               type="text"
               name="phone"
+              className="complete-registration-input"
               placeholder="Enter your phone number"
               value={this.state.phone}
               onChange={this.handleChange}
@@ -81,6 +83,7 @@ class CompleteRegistration extends Component {
             <input
               type="text"
               name="location"
+              className="complete-registration-input"
               placeholder="City, Country"
               value={this.state.location}
               onChange={this.handleChange}
