@@ -1,0 +1,124 @@
+.complete-registration {
+  background-color: #0d1b2a; /* dark blueish */
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.complete-registration h2 {
+  margin-bottom: 20px;
+  color: #ffd60a; /* yellowish */
+  text-align: center;
+}
+
+.registration-form {
+  background: #1b263b;
+  padding: 25px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px; /* Prevents it from being too wide */
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
+}
+
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.icon {
+  margin-right: 8px;
+  color: #ffd60a;
+}
+
+input, textarea {
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+  background-color: #1b263b;
+  color: white;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus {
+  border-color: #ffd60a; /* yellow border on focus */
+}
+
+textarea {
+  resize: none;
+  min-height: 60px;
+}
+
+.file-upload label {
+  cursor: pointer;
+  background-color: #1d3557;
+  padding: 10px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffd60a;
+  transition: background 0.3s ease;
+}
+
+.file-upload label:hover {
+  background-color: #26406b;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #ffd60a; /* yellowish */
+  color: #0d1b2a;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #ffea82;
+}
+
+/* Mobile devices */
+@media screen and (max-width: 480px) {
+    .complete-registration-container {
+    min-height: 100vh; 
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    padding: 20px; 
+  }
+  .registration-form {
+    padding: 15px;
+    width: 90%;
+  }
+  .submit-btn {
+    font-size: 14px;
+  }
+}
+
+/*Tablets */
+@media screen and (max-width: 1024px) {
+  .complete-registration h2 {
+    margin-top: 10px;
+  }
+  .registration-form {
+    padding: 20px;
+  }
+}
