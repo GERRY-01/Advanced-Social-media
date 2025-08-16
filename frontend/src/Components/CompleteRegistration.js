@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { FaUser, FaInfoCircle, FaPhone, FaMapMarkerAlt, FaImage } from "react-icons/fa";
 import "./CompleteRegistration.css";
+import  axios  from "axios";
+import { Navigate } from "react-router-dom";
 
 class CompleteRegistration extends Component {
   constructor(props) {
@@ -9,7 +11,10 @@ class CompleteRegistration extends Component {
       profilePicture: null,
       bio: "",
       phone: "",
-      location: ""
+      location: "",
+      success:"",
+      error:"",
+      redirect: false
     };
   }
 
@@ -23,10 +28,31 @@ class CompleteRegistration extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state);
+
+    const formData = new FormData();
+    formData.append("profilePicture", this.state.profilePicture);
+    formData.append("bio", this.state.bio);
+    formData.append("phone", this.state.phone);
+    formData.append("location", this.state.location);
+
+    axios.post("http://127.0.0.1:8000/completeregistration", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    }).then(res => {
+      console.log(res.data);
+      this.setState({ success: "Registration completed successfully" });
+      this.setState({ redirect: true });
+    }).catch(err => {
+      console.error(err);
+      this.setState({ error: "Registration failed" });
+    });
   };
 
   render() {
+    if (this.state.redirect) {
+      return <Navigate to="/login" />;
+    }
     return (
       <div className="complete-registration">
         <h2>Complete Your Registration</h2>
