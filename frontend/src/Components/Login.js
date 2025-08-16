@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaFacebookF } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import "./Login.css";
+import { Navigate } from "react-router-dom";
 
 class Login extends Component {
     constructor(props) {
@@ -12,7 +13,9 @@ class Login extends Component {
             username: "",
             password: "",
             error: "",
-            showPassword: false
+            success: "",
+            showPassword: false,
+            redirect: false
         };
     }
 
@@ -23,6 +26,8 @@ class Login extends Component {
             password: this.state.password
         }).then(res => {
             console.log(res.data);
+            this.setState({ success: "Login successful" });
+            this.setState({ redirect: true });
         }).catch(err => {
             console.error(err);
             this.setState({ error: "Invalid credentials" });
@@ -34,6 +39,9 @@ class Login extends Component {
     }
 
     render() {
+        if (this.state.redirect) {
+            return <Navigate to="/"/>
+        }
         return (
             <div className="login-container">
                 <div className="login-card">
