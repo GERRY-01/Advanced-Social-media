@@ -53,12 +53,13 @@ class Register extends Component {
             password: this.state.password
         })
         .then(res => {
-            this.setState({ success: "Account created successfully!", error: "" });
+            this.setState({ success: res.data.message, error: "" });
+            localStorage.setItem("user_id", res.data.user_id);
             this.setState({ redirect: true });
         })
         .catch(err => {
             console.error(err);
-            this.setState({ error: "Registration failed. Please try again.", success: "" });
+            this.setState({ error: err.response.data.message, success: "" });
         });
     }
 
@@ -172,6 +173,8 @@ class Register extends Component {
                         </div>
 
                         <button className="register-btn" type="submit">Register</button>
+                        {this.state.error && <p className="error-message">{this.state.error}</p>}
+                        {this.state.success && <p className="success-message">{this.state.success}</p>}
                     </form>
 
                     <div className="divider">or sign up with</div>
@@ -183,10 +186,6 @@ class Register extends Component {
                             <FaFacebook size={20} />
                         </button>
                     </div>
-
-                    {this.state.error && <p className="error-text">{this.state.error}</p>}
-                    {this.state.success && <p className="success-text">{this.state.success}</p>}
-
                     <p className="login-text">
                         Already have an account? <Link to="/login">Login</Link>
                     </p>
