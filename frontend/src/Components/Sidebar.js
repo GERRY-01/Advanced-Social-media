@@ -9,18 +9,45 @@ import {
   FaCog
 } from "react-icons/fa";
 import "./Sidebar.css";
+import axios from "axios";
 
 class Sidebar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      profile_pic: "",
+    };
+  }
+
+  componentDidMount() {
+    this.fetchUserData();
+  }
+
+  fetchUserData() {
+    const user_id = localStorage.getItem("user_id");
+    if (user_id) {
+      axios
+        .get(`http://127.0.0.1:8000/userdata?user_id=${user_id}`)
+        .then((response) => {
+          const { username, profile_pic } = response.data;
+          this.setState({ username, profile_pic });
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
+    }
+  }
   render() {
     return (
       <div className="sidebar">
         <div className="profile">
           <img
-            src="https://i.guim.co.uk/img/static/sys-images/Sport/Pix/pictures/2009/6/11/1244745896731/David-Villa-001.jpg?width=465&dpr=1&s=none&crop=none"
+            src={this.state.profile_pic}
             alt="profile"
             className="profile-pic"
           />
-          <h3 className="profile-name">Gerry</h3>
+          <h3 className="profile-name">{this.state.username}</h3>
         </div>
 
         <nav className="nav-links">
