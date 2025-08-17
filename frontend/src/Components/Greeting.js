@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { FaVideo, FaImage } from "react-icons/fa";
 import "./Greeting.css";
+import axios from "axios";
 
 class Greeting extends Component {
   constructor(props) {
@@ -10,8 +11,28 @@ class Greeting extends Component {
       showPostModal: false,
       postText: "",
       imageFile: null,
-      videoFile: null
+      videoFile: null,
+      username: "",
+      profile_pic: ""
     };
+  }
+  componentDidMount() {
+    this.fetchUserData();
+  }
+
+  fetchUserData() {
+    const user_id = localStorage.getItem("user_id");
+    if (user_id) {
+      axios
+        .get(`http://127.0.0.1:8000/userdata?user_id=${user_id}`)
+        .then((response) => {
+          const { username, profile_pic } = response.data;
+          this.setState({ username, profile_pic });
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
+    }
   }
 
   handleInputClick = () => {
@@ -53,11 +74,11 @@ class Greeting extends Component {
         <div className="start-post">
           <div className="profile-section">
             <img
-              src="https://picsum.photos/seed/profile/60"
+              src={this.state.profile_pic}
               alt="Profile"
               className="profile-pic"
             />
-            <span className="username">Gerry</span>
+            <span className="username">{this.state.username}</span>
           </div>
           <input
             type="text"
@@ -76,11 +97,11 @@ class Greeting extends Component {
 
               <div className="modal-profile">
                 <img
-                  src="https://picsum.photos/seed/profile/60"
+                  src={this.state.profile_pic}
                   alt="Profile"
                   className="profile-pic"
                 />
-                <span className="modal-username">Gerry</span>
+                <span className="modal-username">{this.state.username}</span>
               </div>
 
               <textarea
