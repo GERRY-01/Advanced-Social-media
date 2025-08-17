@@ -105,7 +105,7 @@ class Greeting extends Component {
               </div>
 
               <textarea
-                placeholder="What's on your mind Gerry?"
+                placeholder= {`What's on your mind ${this.state.username}?`}
                 value={postText}
                 onChange={this.handleTextChange}
                 className="post-textarea"
