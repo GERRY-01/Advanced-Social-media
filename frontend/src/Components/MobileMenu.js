@@ -1,5 +1,5 @@
 // MobileMenu.js
-import React, { Component } from "react";
+import React, { Component, use } from "react";
 import './MobileMenu.css';
 import {
   FaUserFriends,
@@ -9,8 +9,35 @@ import {
   FaUser,
   FaCog
 } from "react-icons/fa";
+import axios from "axios";
 
 class MobileMenu extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      profile_pic: "",
+    };
+  }
+
+  componentDidMount() {
+    this.fetchUserData();
+  }
+
+  fetchUserData() {
+    const user_id = localStorage.getItem("user_id");
+    if (user_id) {
+      axios
+        .get(`http://127.0.0.1:8000/userdata?user_id=${user_id}`)
+        .then((response) => {
+          const { username, profile_pic } = response.data;
+          this.setState({ username, profile_pic });
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
+    }
+  }
   render() {
     const { isOpen, toggleMenu } = this.props;
 
@@ -24,11 +51,11 @@ class MobileMenu extends Component {
         {/* Profile */}
         <div className="profile-section">
           <img
-            src="https://i.guim.co.uk/img/static/sys-images/Sport/Pix/pictures/2009/6/11/1244745896731/David-Villa-001.jpg?width=465&dpr=1&s=none&crop=none"
+            src={this.state.profile_pic}
             alt="profile"
             className="profile-pic"
           />
-          <span className="profile-name">Gerry</span>
+          <span className="profile-name">{this.state.username}</span>
         </div>
 
         {/* Navigation Links */}
