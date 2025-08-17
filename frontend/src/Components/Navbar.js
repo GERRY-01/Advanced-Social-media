@@ -7,39 +7,63 @@ import {
   FaEnvelope,
   FaCog,
   FaSearch,
-  FaGlobe
+  FaGlobe,
 } from "react-icons/fa";
 import "./Navbar.css";
-import Sidebar from "./Sidebar";
+import axios from "axios";
 
 class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       active: "home", // default active icon
-      sidebarOpen: false
+      sidebarOpen: false,
+      username: "",
+      profile_pic: "",
+      loading: true,
+      error: null,
     };
+  }
+
+  componentDidMount() {
+    this.fetchUserData();
+  }
+
+  fetchUserData() {
+    const user_id = localStorage.getItem("user_id");
+    if (user_id) {
+      axios
+        .get(`http://127.0.0.1:8000/userdata?user_id=${user_id}`)
+        .then((response) => {
+          const { username, profile_pic } = response.data;
+          this.setState({ username, profile_pic, loading: false });
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+          this.setState({ loading: false, error: "Failed to load user data" });
+        });
+    }
   }
 
   setActive = (name) => {
     this.setState({ active: name });
   };
+
   toggleSidebar = () => {
     this.setState({ sidebarOpen: !this.state.sidebarOpen });
   };
 
   render() {
-    const { active } = this.state;
+    const { active, loading, error, username, profile_pic } = this.state;
 
     return (
-
       <nav className="navbar">
-        <MobileMenu isOpen={this.state.sidebarOpen} toggleMenu={this.toggleSidebar}/>
-        {/* Top row: logo + search (mobile) */}
+        <MobileMenu isOpen={this.state.sidebarOpen} toggleMenu={this.toggleSidebar} />
+
+        {/* Top row: logo + search */}
         <div className="top-row">
           <div className="logo">
-            <FaGlobe className="logo-icon" />
-            SocialApp
+            <FaGlobe className="logo-icon" /> SocialApp
           </div>
           <div className="search-bar">
             <FaSearch className="search-icon" />
@@ -47,7 +71,7 @@ class Navbar extends Component {
           </div>
         </div>
 
-        {/* Bottom row: navigation icons + hamburger */}
+        {/* Bottom row: navigation icons */}
         <div className="nav-row">
           <div className="nav-icons">
             <div
@@ -81,22 +105,25 @@ class Navbar extends Component {
               <FaCog size={25} />
             </div>
 
-            {/* Hamburger as last nav item */}
-            <div className="nav-item hamburger" onClick={this.toggleSidebar}> 
+            {/* Hamburger */}
+            <div className="nav-item hamburger" onClick={this.toggleSidebar}>
               &#9776;
             </div>
           </div>
         </div>
 
-
-        {/* Profile (desktop/iPad only) */}
+        {/* Profile section */}
         <div className="profile">
-          <img
-            src="https://i.guim.co.uk/img/static/sys-images/Sport/Pix/pictures/2009/6/11/1244745896731/David-Villa-001.jpg?width=465&dpr=1&s=none&crop=none"
-            alt="profile"
-            className="profile-pic"
-          />
-          <span className="username">Gerry</span>
+          {loading ? (
+            <span>Loading...</span>
+          ) : error ? (
+            <span className="error">{error}</span>
+          ) : (
+            <>
+              <img src={profile_pic} alt="profile" className="profile-pic" />
+              <span className="username">{username}</span>
+            </>
+          )}
         </div>
       </nav>
     );
