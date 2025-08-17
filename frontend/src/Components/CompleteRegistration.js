@@ -29,7 +29,14 @@ class CompleteRegistration extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
+    const user_id = localStorage.getItem("user_id");
+    if (!user_id) {
+      this.setState({ error: "User not found, register first" });
+      return;
+    }
+
     const formData = new FormData();
+    formData.append("user_id", user_id);
     formData.append("profilePicture", this.state.profilePicture);
     formData.append("bio", this.state.bio);
     formData.append("phone", this.state.phone);
@@ -41,11 +48,11 @@ class CompleteRegistration extends Component {
       }
     }).then(res => {
       console.log(res.data);
-      this.setState({ success: "Registration completed successfully" });
+      this.setState({ success: res.data.message });
       this.setState({ redirect: true });
     }).catch(err => {
       console.error(err);
-      this.setState({ error: "Registration failed" });
+      this.setState({ error: err.response.data.message });
     });
   };
 
@@ -117,6 +124,8 @@ class CompleteRegistration extends Component {
           </div>
 
           <button type="submit" className="submit-btn">Save</button>
+          {this.state.success && <p className="success-message">{this.state.success}</p>}
+          {this.state.error && <p className="error-message">{this.state.error}</p>}
         </form>
       </div>
     );
