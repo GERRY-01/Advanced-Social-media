@@ -52,7 +52,7 @@ class Login extends Component {
                             <FaEnvelope className="input-icon" />
                             <input
                                 type="text"
-                                placeholder="E-mail"
+                                placeholder="Username"
                                 onChange={e => this.setState({ username: e.target.value })}
                                 required
                             />
@@ -75,7 +75,8 @@ class Login extends Component {
                         <button type="submit" className="login-btn">Login</button>
                     </form>
 
-                    {this.state.error && <p className="error">{this.state.error}</p>}
+                    {this.state.error && <p className="error-message">{this.state.error}</p>}
+                    {this.state.success && <p className="success-message">{this.state.success}</p>}
 
                     <div className="divider">or login with</div>
 
