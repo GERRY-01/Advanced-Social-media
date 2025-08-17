@@ -35,10 +35,11 @@ def register_user(request):
     if user is not None:
         login(request, user)
 
-    return Response({'message': 'User registered successfully'})
+    return Response({'message': 'User registered successfully','user_id': user.id})
 
 @api_view(['POST'])
 def complete_registration(request):
+    user_id = request.data.get('user_id')
     profile_pic = request.FILES.get('profilePicture')
     bio = request.data.get('bio')
     phone = request.data.get('phone')
@@ -47,7 +48,15 @@ def complete_registration(request):
     if not profile_pic or not bio or not phone or not location:
         return Response({'message': 'All fields are required'}, status=400)
 
-    registration = Registration.objects.get(user=request.user)
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return Response({'message': 'User not found'}, status=404)
+    
+    try:
+        registration = Registration.objects.get(user=user)
+    except Registration.DoesNotExist:
+        return Response({'message': 'Registration not found'}, status=404)
     registration.profile_pic = profile_pic
     registration.bio = bio
     registration.phone_num = phone
@@ -55,3 +64,31 @@ def complete_registration(request):
     registration.save()
 
     return Response({'message': 'Registration completed successfully'})
+
+@api_view(['POST'])
+def login_user(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+
+    user = authenticate(username=username, password=password)
+
+    if user is not None:
+        login(request, user)
+        return Response({'message': 'Login successful', 'user_id': user.id})
+    else:
+        return Response({'message': 'Invalid credentials'}, status=401)
+    
+@api_view(['GET'])
+def user_data(request):
+    user_id = request.query_params.get('user_id')
+    try:
+        user = User.objects.get(id=user_id)
+        registration = Registration.objects.get(user=user)
+        return Response({
+            "username": user.username,
+            "profile_pic": request.build_absolute_uri(registration.profile_pic.url)
+        })
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=404)
+    except Registration.DoesNotExist:
+        return Response({"error": "Registration not found"}, status=404)
