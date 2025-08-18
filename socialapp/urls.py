@@ -6,4 +6,6 @@ urlpatterns = [
     path('completeregistration', views.complete_registration, name='completeregistration'),
     path('login', views.login_user, name='login'),
     path('userdata', views.user_data, name='userdata'),
+    path('createpost', views.create_post, name='createpost'),
+    path('getposts', views.get_posts, name='getposts'),
 ]
