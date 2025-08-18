@@ -1,5 +1,6 @@
 // src/Components/Posts.js
 import React, { Component } from "react";
+import { FaImage, FaVideo } from "react-icons/fa";
 import {
   FaThumbsUp,
   FaCommentAlt,
@@ -15,7 +16,11 @@ class Posts extends Component {
       username: "",
       profile_pic: "",
       posts: [],
-      openMenuId: null
+      openMenuId: null,
+      editingPost: null,      
+      editedCaption: "",      
+      editedImage: null,  
+      editedVideo: null 
     };
   }
 
@@ -75,6 +80,36 @@ deletePost(postId) {
       console.error("Error deleting post:", error);
     });
 }
+editPost(post) {
+  this.setState({
+    editingPost: post,
+    editedCaption: post.caption,
+    editedImage: null,
+    editedVideo: null
+  });
+}
+submitEditedPost =(post) => {
+  const { editingPost, editedCaption, editedImage, editedVideo } = this.state;
+  const formData = new FormData();
+  formData.append("caption", editedCaption);
+  if (editedImage) {
+    formData.append("image", editedImage);
+  }
+  if (editedVideo) {
+    formData.append("video", editedVideo);
+  }
+    axios.put(`http://127.0.0.1:8000/editpost/${editingPost.id}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" }
+  })
+    .then(() => {
+      this.fetchPosts();
+      this.setState({ editingPost: null });
+    })
+    .catch((error) => {
+      console.error("Error editing post:", error);
+    });
+  
+}
 
   render() { 
     return (
@@ -99,7 +134,7 @@ deletePost(postId) {
                         {/* Conditional menu */}
                         {this.state.openMenuId === post.id && (
                           <div className="post-menu">
-                            <div className="post-menu-item" onClick={() => this.editPost(post.id)}>Edit</div>
+                            <div className="post-menu-item" onClick={() => this.editPost(post)}>Edit</div>
                             <div className="post-menu-item" onClick={() => this.deletePost(post.id)}>Delete</div>
                           </div>
                         )}
@@ -126,6 +161,44 @@ deletePost(postId) {
             </div>
           </div>
         ))}
+      
+        {this.state.editingPost && (
+        <div className="modal-overlay">
+          <div className="edit-modal">
+            <h3>Edit Post</h3>
+            <textarea
+              value={this.state.editedCaption}
+              onChange={(e) => this.setState({ editedCaption: e.target.value })}
+            />
+              <div className="edit-file-selectors">
+                {/* Image selector */}
+                <label className="file-icon">
+                  <FaImage size={25} />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={(e) => this.setState({ editedImage: e.target.files[0] })}
+                  />
+                </label>
+
+                {/* Video selector */}
+                <label className="file-icon">
+                  <FaVideo size={25} />
+                  <input
+                    type="file"
+                    accept="video/*"
+                    style={{ display: "none" }}
+                    onChange={(e) => this.setState({ editedVideo: e.target.files[0] })}
+                  />
+                </label>
+              </div>
+
+            <button onClick={this.submitEditedPost}>Save Changes</button>
+            <button onClick={() => this.setState({ editingPost: null })}>Cancel</button>
+          </div>
+        </div>
+      )}
       </div>
     );
   }
