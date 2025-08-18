@@ -78,17 +78,81 @@ def login_user(request):
     else:
         return Response({'message': 'Invalid credentials'}, status=401)
     
+ # Fetching user data   
 @api_view(['GET'])
 def user_data(request):
     user_id = request.query_params.get('user_id')
     try:
         user = User.objects.get(id=user_id)
         registration = Registration.objects.get(user=user)
-        return Response({
+
+        user_info = {
             "username": user.username,
-            "profile_pic": request.build_absolute_uri(registration.profile_pic.url)
-        })
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "profile_pic": request.build_absolute_uri(registration.profile_pic.url) if registration.profile_pic else None,
+            "bio": registration.bio,
+            "dob": registration.dob,
+            "gender": registration.gender,
+            "phone_num": registration.phone_num,
+            "location": registration.location,
+        }
+        return Response(user_info)
+
     except User.DoesNotExist:
         return Response({"error": "User not found"}, status=404)
     except Registration.DoesNotExist:
         return Response({"error": "Registration not found"}, status=404)
+
+@api_view(['POST'])
+def create_post(request):
+    user_id = request.data.get('user_id')
+    caption = request.data.get('caption')
+    image = request.FILES.get('image')
+    video = request.FILES.get('video')
+
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return Response({'message': 'User not found'}, status=404)
+
+    post = Posts(user=user, caption=caption, image=image, video=video)
+    post.save()
+
+    return Response({
+        'message': 'Post created successfully',
+        'post': {
+            'id': post.id,
+            'caption': post.caption,
+            'image': request.build_absolute_uri(post.image.url) if post.image else None,
+            'video': request.build_absolute_uri(post.video.url) if post.video else None,
+            'time': post.timestamp,
+            'likes': post.likes,
+            'comments': post.comments,
+            'shares': post.shares,
+        }
+    })
+
+# Fetching posts
+@api_view(['GET'])
+def get_posts(request):
+    posts = Posts.objects.all().order_by('-timestamp')
+    post_data = []
+    for post in posts:
+        post_data.append({
+            'id': post.id,
+            'caption': post.caption,
+            'image': request.build_absolute_uri(post.image.url) if post.image else None,
+            'video': request.build_absolute_uri(post.video.url) if post.video else None,
+            'time': post.timestamp,
+            'likes': post.likes,
+            'comments': post.comments,
+            'shares': post.shares,
+            'user': {
+                'id': post.user.id,
+                'username': post.user.username,
+                'profile_pic': request.build_absolute_uri(post.user.registration.profile_pic.url) if post.user.registration.profile_pic else None
+            }
+        })
+    return Response({'posts': post_data})
