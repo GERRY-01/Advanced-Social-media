@@ -74,6 +74,37 @@
 .post-icon {
   color: grey;
 }
+.post-menu-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-left: auto;
+}
+
+.three-dots {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.post-menu {
+  position: absolute;
+  top: 25px;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+  z-index: 100;
+}
+
+.post-menu-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.post-menu-item:hover {
+  background-color: #f0f0f0;
+}
+
 
 /* Tablet/iPad */
 @media (max-width: 1024px) {
