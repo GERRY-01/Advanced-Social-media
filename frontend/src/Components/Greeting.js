@@ -59,11 +59,34 @@ class Greeting extends Component {
   handleVideoChange = (e) => {
     this.setState({ videoFile: e.target.files[0] });
   };
+handlePost = () => {
+  const { postText, imageFile, videoFile } = this.state;
+  const user_id = localStorage.getItem("user_id");
 
-  handlePost = () => {
-    console.log("Posting:", this.state.postText, this.state.imageFile, this.state.videoFile);
-    this.handleCloseModal();
-  };
+  if (!user_id) {
+    this.setState({ error: "User not found, register first" });
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("caption", postText);
+  formData.append("user_id", user_id); 
+  if (imageFile) formData.append("image", imageFile);
+  if (videoFile) formData.append("video", videoFile);
+
+  axios
+    .post("http://127.0.0.1:8000/createpost?user_id="+user_id+"", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    .then((response) => {
+      console.log("Post created:", response.data);
+      this.handleCloseModal(); // <-- close only after success
+    })
+    .catch((error) => {
+      console.error("Error creating post:", error.response?.data || error);
+      this.setState({ error: "Failed to create post" });
+    });
+};
 
   render() {
     const { showPostModal, postText } = this.state;
