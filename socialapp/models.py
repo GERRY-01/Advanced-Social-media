@@ -15,3 +15,13 @@ class Registration(models.Model):
         bio = models.TextField()
         phone_num = models.CharField(max_length=10)
         location = models.CharField(max_length=20)
+
+class Posts(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    caption = models.TextField()
+    image = models.ImageField(upload_to='post_images/', blank=True, null=True)
+    video = models.FileField(upload_to='post_videos/', blank=True, null=True)
+    likes = models.IntegerField(default=0)
+    comments = models.IntegerField(default=0)
+    shares = models.IntegerField(default=0)
+    timestamp = models.DateTimeField(auto_now_add=True)
