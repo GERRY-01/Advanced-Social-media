@@ -6,54 +6,60 @@ import {
   FaShare
 } from "react-icons/fa";
 import "./Posts.css";
+import axios from "axios";
 
 class Posts extends Component {
-  render() {
-    // Example posts (will be fetched from backend later)
-    const posts = [
-      {
-        id: 1,
-        username: "Alice Johnson",
-        profilePic: "https://picsum.photos/seed/alice/50",
-        time: "1 hour ago",
-        caption: "Enjoying a sunny day at the beach 🌊",
-        image: "https://picsum.photos/seed/beach/500/300",
-        likes: 6,
-        comments: 4,
-        shares: 2
-      },
-      {
-        id: 2,
-        username: "Bob Smith",
-        profilePic: "https://picsum.photos/seed/bob/50",
-        time: "3 hours ago",
-        caption: "My new kitten is adorable 🐱",
-        image: "https://picsum.photos/seed/kitten/500/300",
-        likes: 15,
-        comments: 10,
-        shares: 5
-      }
-    ];
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      profile_pic: "",
+      posts: [],
+      
+    };
+  }
 
+  componentDidMount() {
+    this.fetchPosts();
+  }
+
+  fetchPosts() {
+    const user_id = localStorage.getItem("user_id");
+    if (user_id) {
+      axios
+        .get(`http://127.0.0.1:8000/getposts?user_id=${user_id}`)
+        .then((response) => {
+          const {posts } = response.data;
+          this.setState({ posts });
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
+    }
+  }
+
+  render() { 
     return (
       <div className="posts-container">
-        {posts.map((post) => (
+        {this.state.posts.map((post) => (
           <div key={post.id} className="post-card">
             <div className="post-header">
               <img
-                src={post.profilePic}
-                alt={post.username}
+                src={post.user.profile_pic}
+                alt={post.user.username}
                 className="post-profile-pic"
               />
               <div>
-                <span className="post-username">{post.username}</span>
+                <span className="post-username">{post.user.username}</span>
                 <span className="post-time">{post.time}</span>
               </div>
             </div>
 
             <div className="post-caption">{post.caption}</div>
 
-            <img src={post.image} alt="Post" className="post-image" />
+            {post.image && <img src={post.image} alt="Post" className="post-image" />}
+
+            {post.video && <video src={post.video} controls className="post-image" />}
 
             <div className="post-actions">
               <div className="post-action">
