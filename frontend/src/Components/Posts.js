@@ -15,7 +15,7 @@ class Posts extends Component {
       username: "",
       profile_pic: "",
       posts: [],
-      
+      openMenuId: null
     };
   }
 
@@ -56,7 +56,25 @@ handletime(timestamp){
     return days === 1 ? "1 day ago" : `${days} days ago`;
   }
 }
- 
+
+toggleMenu(postId) {
+  if (this.state.openMenuId === postId) {
+    this.setState({ openMenuId: null });
+  } else {
+    this.setState({ openMenuId: postId });
+  }
+}
+
+deletePost(postId) {
+  axios
+    .delete(`http://127.0.0.1:8000/deletepost/${postId}`)
+    .then(() => {
+      this.fetchPosts();
+    })
+    .catch((error) => {
+      console.error("Error deleting post:", error);
+    });
+}
 
   render() { 
     return (
@@ -73,6 +91,20 @@ handletime(timestamp){
                 <span className="post-username">{post.user.username}</span>
                 <span className="post-time">{this.handletime(post.time)}</span>
               </div>
+
+                    {/* Three dots button */}
+                      <div className="post-menu-wrapper">
+                        <span className="three-dots" onClick={() => this.toggleMenu(post.id)}>⋮</span>
+
+                        {/* Conditional menu */}
+                        {this.state.openMenuId === post.id && (
+                          <div className="post-menu">
+                            <div className="post-menu-item" onClick={() => this.editPost(post.id)}>Edit</div>
+                            <div className="post-menu-item" onClick={() => this.deletePost(post.id)}>Delete</div>
+                          </div>
+                        )}
+                      </div>
+
             </div>
 
             <div className="post-caption">{post.caption}</div>
