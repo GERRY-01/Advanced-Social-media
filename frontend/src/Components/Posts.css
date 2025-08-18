@@ -105,6 +105,103 @@
   background-color: #f0f0f0;
 }
 
+/* editing posts */
+/* Edit Post Modal */
+.edit-modal {
+  position: fixed; /* so it floats above content */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* center it */
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  width: 90%;
+  max-width: 500px;
+}
+
+.edit-modal h3 {
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.edit-modal textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.edit-modal input[type="file"] {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.edit-modal button {
+  padding: 8px 15px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.edit-modal button:first-of-type {
+  background-color: #007bff;
+  color: white;
+}
+
+.edit-modal button:first-of-type:hover {
+  background-color: #0056b3;
+}
+
+.edit-modal button:last-of-type {
+  background-color: #ccc;
+}
+
+.edit-modal button:last-of-type:hover {
+  background-color: #999;
+}
+
+/* Optional: darken background when modal is open */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 900;
+}
+.edit-file-selectors {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.file-icon {
+  cursor: pointer;
+  color: #007bff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.file-icon:hover {
+  background-color: #e0e0e0;
+}
+
 
 /* Tablet/iPad */
 @media (max-width: 1024px) {
@@ -112,6 +209,25 @@
     max-width: 440px;
     margin-left: 30px;
     width: 300px;
+  }
+    .edit-modal {
+    width: 300px;
+    padding: 15px;
+    margin-top: -200px;
+  }
+  .edit-modal h3 {
+    font-size: 1.2rem;
+  }
+  .edit-modal textarea {
+    font-size: 0.9rem;
+    width: 90%;
+  }
+  .edit-modal input[type="file"] {
+    font-size: 0.8rem;
+  }
+  .edit-modal button {
+    font-size: 0.8rem;
+    width: 120px;
   }
 }
 
