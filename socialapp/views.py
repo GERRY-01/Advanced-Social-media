@@ -179,3 +179,22 @@ def edit_post(request, post_id):
         return Response({'message': 'Post edited successfully'})
     except Posts.DoesNotExist:
         return Response({'message': 'Post not found'}, status=404)
+    
+@api_view(['POST'])
+def like_post(request, post_id):
+   post = Posts.objects.get(id=post_id)
+   isliked = request.data.get('liked', False)
+
+   if isliked:
+       post.likes += 1
+   else:
+       post.likes -= 1 if post.likes > 0 else 0
+
+   post.save()
+
+   return Response({
+       'likes': post.likes,
+       'liked': isliked
+   })
+   
+
