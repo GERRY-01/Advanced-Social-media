@@ -10,4 +10,5 @@ urlpatterns = [
     path('getposts', views.get_posts, name='getposts'),
     path('deletepost/<int:post_id>', views.delete_post, name='deletepost'),
     path('editpost/<int:post_id>', views.edit_post, name='editpost'),
+    path('likepost/<int:post_id>', views.like_post, name='likepost'),
 ]
