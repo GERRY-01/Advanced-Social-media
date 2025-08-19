@@ -88,7 +88,8 @@ editPost(post) {
     editedVideo: null
   });
 }
-submitEditedPost =(post) => {
+
+ submitEditedPost =(post) => {
   const { editingPost, editedCaption, editedImage, editedVideo } = this.state;
   const formData = new FormData();
   formData.append("caption", editedCaption);
@@ -109,6 +110,24 @@ submitEditedPost =(post) => {
       console.error("Error editing post:", error);
     });
   
+}
+
+toggleLike = (postId, liked) => {
+  axios.post(`http://127.0.0.1:8000/likepost/${postId}`, { liked: !liked })
+  .then((response) => {
+    const{likes, liked: updatedLiked} = response.data;
+    const updatedPosts = this.state.posts.map((post) => {
+      if (post.id === postId) {
+        return { ...post, likes, liked: updatedLiked };
+      }
+      return post;
+    });
+    this.setState({ posts: updatedPosts });
+  }
+  )
+  .catch((error) => {
+    console.error("Error toggling like:", error);
+  });
 }
 
   render() { 
@@ -149,12 +168,16 @@ submitEditedPost =(post) => {
             {post.video && <video src={post.video} controls className="post-image" />}
 
             <div className="post-actions">
-              <div className="post-action">
-                <FaThumbsUp className="post-icon" /> {post.likes} Likes
+              <div className="post-action"  onClick={() => this.toggleLike(post.id, post.liked)}>
+                <FaThumbsUp className="post-icon" style={{ color: post.liked ? 'blue' : 'grey' }} /> {post.likes} Likes
               </div>
+
+
               <div className="post-action">
                 <FaCommentAlt className="post-icon" /> {post.comments} Comments
               </div>
+
+
               <div className="post-action">
                 <FaShare className="post-icon" /> {post.shares} Shares
               </div>
