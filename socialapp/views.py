@@ -156,3 +156,26 @@ def get_posts(request):
             }
         })
     return Response({'posts': post_data})
+
+@api_view(['DELETE'])
+def delete_post(request, post_id):
+    try:
+        post = Posts.objects.get(id=post_id)
+        post.delete()
+        return Response({'message': 'Post deleted successfully'})
+    except Posts.DoesNotExist:
+        return Response({'message': 'Post not found'}, status=404)
+    
+@api_view(['PUT'])
+def edit_post(request, post_id):
+    try:
+        post = Posts.objects.get(id=post_id)
+        post.caption = request.data.get('caption')
+        if 'image' in request.FILES:
+            post.image = request.FILES['image']
+        if 'video' in request.FILES:
+            post.video = request.FILES['video']
+        post.save()
+        return Response({'message': 'Post edited successfully'})
+    except Posts.DoesNotExist:
+        return Response({'message': 'Post not found'}, status=404)
