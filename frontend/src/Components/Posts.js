@@ -20,7 +20,8 @@ class Posts extends Component {
       editingPost: null,      
       editedCaption: "",      
       editedImage: null,  
-      editedVideo: null 
+      editedVideo: null,
+      opencomments: null
     };
   }
 
@@ -130,6 +131,13 @@ toggleLike = (postId, liked) => {
   });
 }
 
+toggleComments = (postId) => {
+  if (this.state.opencomments === postId) {
+    this.setState({ opencomments: null });
+  } else {
+    this.setState({ opencomments: postId });
+  }
+}
   render() { 
     return (
       <div className="posts-container">
@@ -173,14 +181,46 @@ toggleLike = (postId, liked) => {
               </div>
 
 
-              <div className="post-action">
+              <div className="post-action" onClick={() => this.toggleComments(post.id)}>
                 <FaCommentAlt className="post-icon" /> {post.comments} Comments
               </div>
-
 
               <div className="post-action">
                 <FaShare className="post-icon" /> {post.shares} Shares
               </div>
+
+               {this.state.opencomments === post.id && (
+                  <div className="comments-section">
+                    <div className="comments-header">
+                      <span className="comments-title">Comments</span>
+                      <button className="close-btn" onClick={() => this.toggleComments(post.id)}>✖</button>
+                    </div>
+
+                    {/* Scrollable list */}
+                    <div className="comments-list">
+                      <div className="comment">
+                        <img src="https://i.pravatar.cc/50" alt="profile" className="comment-pic" />
+                        <div className="comment-body">
+                          <span className="comment-username">JohnDoe</span>
+                          <span className="comment-time">2h ago</span>
+                          <p className="comment-text">This is a comment.</p>
+                        </div>
+                      </div>
+                      {/* Map comments here */}
+                    </div>
+
+                    {/* Input fixed at bottom */}
+                    <div className="comment-input">
+                      <input 
+                        type="text" 
+                        placeholder="Write a comment..." 
+                        className="comment-textbox" 
+                      />
+                      <button className="send-btn">➤</button>
+                    </div>
+                  </div>
+                )}
+
             </div>
           </div>
         ))}
