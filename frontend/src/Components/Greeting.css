@@ -65,6 +65,7 @@
   padding: 16px;           /* prevents edge-to-edge on mobile */
   box-sizing: border-box;
   overflow-y: auto;        /* no viewport overflow */
+  z-index: 1000;
 }
 
 /* Modal card */
