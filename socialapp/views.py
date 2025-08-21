@@ -198,3 +198,45 @@ def like_post(request, post_id):
    })
    
 
+@api_view(['POST'])
+def add_comment(request, post_id):
+    post = Posts.objects.get(id=post_id)
+    comment = request.data.get('comment')
+    user_id = request.data.get('user_id')
+    user = User.objects.get(id=user_id)
+    new_comment = CommentSection.objects.create(post=post, user=user, comment=comment)
+
+    post.comments += 1
+    post.save()
+
+    return Response({
+        'message': 'Comment added successfully',
+        'comment': {
+            'id': new_comment.id,
+            'comment': new_comment.comment,
+            'time': new_comment.timestamp,
+            'user': {
+                'id': new_comment.user.id,
+                'username': new_comment.user.username,
+                'profile_pic': request.build_absolute_uri(new_comment.user.registration.profile_pic.url) if new_comment.user.registration.profile_pic else None
+            }
+        }
+    })
+
+@api_view(['GET'])
+def get_comments(request, post_id):
+    post = Posts.objects.get(id=post_id)
+    comments = CommentSection.objects.filter(post=post).order_by('-timestamp')
+    comment_data = []
+    for comment in comments:
+        comment_data.append({
+            'id': comment.id,
+            'comment': comment.comment,
+            'time': comment.timestamp,
+            'user': {
+                'id': comment.user.id,
+                'username': comment.user.username,
+                'profile_pic': request.build_absolute_uri(comment.user.registration.profile_pic.url) if comment.user.registration.profile_pic else None
+            }
+        })
+    return Response({'comments': comment_data})
