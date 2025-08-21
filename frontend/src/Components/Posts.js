@@ -21,12 +21,15 @@ class Posts extends Component {
       editedCaption: "",      
       editedImage: null,  
       editedVideo: null,
-      opencomments: null
+      opencomments: null,
+      comments: {},
+      postComments: {},
     };
   }
 
   componentDidMount() {
     this.fetchPosts();
+    this.fetchComments();
   }
 
   fetchPosts() {
@@ -135,10 +138,49 @@ toggleComments = (postId) => {
   if (this.state.opencomments === postId) {
     this.setState({ opencomments: null });
   } else {
-    this.setState({ opencomments: postId });
+    this.setState({ opencomments: postId }, () => {
+      this.fetchComments(postId);
+    });
   }
 }
+
+submitComments = (postId, comment) => {
+  if(!comment){
+    return
+  }
+  const user_id = localStorage.getItem("user_id");
+  axios.post(`http://127.0.0.1:8000/addcomment/${postId}`, { comment,user_id })
+  .then((response) => {
+    console.log("Comment added successfully:", response.data);
+    this.fetchComments(postId);
+    this.setState(prevState => ({
+      comments: {...prevState.comments, [postId]: ""},
+    }))
+    this.fetchPosts();
+  })
+  .catch((error) => {
+    console.error("Error adding comment:", error);
+  });
+}
+
+fetchComments = (postId) => {
+  console.log("Fetching comments for postId:", postId);
+  axios.get(`http://127.0.0.1:8000/getcomments/${postId}`)
+    .then((response) => {
+      this.setState(prevState => ({
+        postComments: {
+          ...prevState.postComments,
+          [postId]: response.data.comments,
+        },
+      }));
+    })
+    .catch((error) => {
+      console.error('Error fetching comments:', error);
+    });
+}
+
   render() { 
+    const comments = this.state.comments
     return (
       <div className="posts-container">
         {this.state.posts.map((post) => (
@@ -197,17 +239,25 @@ toggleComments = (postId) => {
                     </div>
 
                     {/* Scrollable list */}
-                    <div className="comments-list">
-                      <div className="comment">
-                        <img src="https://i.pravatar.cc/50" alt="profile" className="comment-pic" />
-                        <div className="comment-body">
-                          <span className="comment-username">JohnDoe</span>
-                          <span className="comment-time">2h ago</span>
-                          <p className="comment-text">This is a comment.</p>
-                        </div>
+                    
+                  <div className="comments-list">
+                        {(this.state.postComments[post.id] || []).map((comment) => (
+                          <div className="comment" key={comment.id}>
+                            <img 
+                              src={comment.user.profile_pic || "https://i.pravatar.cc/50"} 
+                              alt={comment.user.username} 
+                              className="comment-pic" 
+                            />
+                            <div className="comment-body">
+                              <span className="comment-username">{comment.user.username}</span>
+                              <span className="comment-time">2h ago</span> 
+                              <p className="comment-text">{comment.comment}</p>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                      {/* Map comments here */}
-                    </div>
+
+
 
                     {/* Input fixed at bottom */}
                     <div className="comment-input">
@@ -215,10 +265,13 @@ toggleComments = (postId) => {
                         type="text" 
                         placeholder="Write a comment..." 
                         className="comment-textbox" 
+                        value={this.state.comments[post.id] || ''}
+                        onChange={(e) => this.setState(prevState => ({ comments: { ...prevState.comments, [post.id]: e.target.value } }))}
                       />
-                      <button className="send-btn">➤</button>
+                      <button className="send-btn" onClick={() => this.submitComments(post.id, this.state.comments[post.id])}>➤</button>
                     </div>
                   </div>
+                  
                 )}
 
             </div>
