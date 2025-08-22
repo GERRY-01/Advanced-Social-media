@@ -6,7 +6,8 @@ import {
   FaEnvelope,
   FaRobot,
   FaUser,
-  FaCog
+  FaCog,
+  FaSignOutAlt, 
 } from "react-icons/fa";
 import "./Sidebar.css";
 import axios from "axios";
@@ -37,6 +38,18 @@ class Sidebar extends Component {
           console.error("Error fetching user data:", error);
         });
     }
+  }
+  logout() {
+    axios
+      .post("http://127.0.0.1:8000/logout")
+      .then(() => {
+        localStorage.removeItem("user_id");
+        console.log("Logout successful");
+        window.location.href = "/login";
+      })
+      .catch((error) => {
+        console.error("Error logging out:", error);
+      });
   }
   render() {
     return (
@@ -74,6 +87,10 @@ class Sidebar extends Component {
           <a href="#settings">
             <FaCog className="icon" />
             Settings
+          </a>
+          <a href="/login" onClick={(e) => { e.preventDefault(); this.logout()} }>
+            <FaSignOutAlt className="icon" />
+            Logout
           </a>
         </nav>
       </div>
