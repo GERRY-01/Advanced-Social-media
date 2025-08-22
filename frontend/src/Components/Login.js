@@ -26,6 +26,7 @@ class Login extends Component {
             password: this.state.password
         }).then(res => {
             console.log(res.data);
+            localStorage.setItem("user_id", res.data.user_id);
             this.setState({ success: "Login successful" });
             this.setState({ redirect: true });
         }).catch(err => {
