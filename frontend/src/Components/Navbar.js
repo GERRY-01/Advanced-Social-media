@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa";
 import "./Navbar.css";
 import axios from "axios";
+import { NavLink } from "react-router-dom";
 
 class Navbar extends Component {
   constructor(props) {
@@ -74,18 +75,23 @@ class Navbar extends Component {
         {/* Bottom row: navigation icons */}
         <div className="nav-row">
           <div className="nav-icons">
-            <div
-              className={`nav-item ${active === "home" ? "active" : ""}`}
-              onClick={() => this.setActive("home")}
-            >
-              <FaHome size={25} />
-            </div>
-            <div
-              className={`nav-item ${active === "videos" ? "active" : ""}`}
-              onClick={() => this.setActive("videos")}
-            >
-              <FaVideo size={25} />
-            </div>
+
+          {/* Link to the home page */}
+           <NavLink 
+            to="/" 
+            className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+          >
+            <FaHome size={25} />
+            </NavLink>
+
+          {/* Link to the reels page */}
+          <NavLink 
+            to="/reels" 
+            className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+          >
+            <FaVideo size={25} />
+            </NavLink>
+
             <div
               className={`nav-item ${active === "followers" ? "active" : ""}`}
               onClick={() => this.setActive("followers")}
