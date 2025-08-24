@@ -7,7 +7,8 @@ import {
   FaEnvelope,
   FaRobot,
   FaUser,
-  FaCog
+  FaCog,
+  FaSignOutAlt,
 } from "react-icons/fa";
 import axios from "axios";
 
@@ -38,13 +39,28 @@ class MobileMenu extends Component {
         });
     }
   }
+
+  logout_user =(e)=>{
+    e.preventDefault();
+    axios
+    .post("http://127.0.0.1:8000/logout")
+    .then(() => {
+      localStorage.removeItem("user_id");
+      console.log("Logout successful");
+      window.location.href = "/login";
+    })
+    .catch((error) => {
+      console.error("Error logging out:", error);
+    });
+  }
+
   render() {
     const { isOpen, toggleMenu } = this.props;
 
     return (
       <div className={`mobile-menu-overlay ${isOpen ? "open" : ""}`}>
         {/* Close button */}
-        <span className="close-btn" onClick={toggleMenu}>
+        <span className="mobile-close-btn" onClick={toggleMenu}>
           &times;
         </span>
 
@@ -66,6 +82,7 @@ class MobileMenu extends Component {
           <li><FaRobot /> AI Chatbot</li>
           <li><FaUser /> Profile</li>
           <li><FaCog /> Settings</li>
+          <li onClick={this.logout_user}><FaSignOutAlt /> Logout</li>
         </ul>
       </div>
     );
