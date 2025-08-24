@@ -1,8 +1,7 @@
 // src/Components/Posts.js
 import React, { Component } from "react";
-import { FaImage, FaVideo } from "react-icons/fa";
+import { FaHeart, FaImage, FaVideo } from "react-icons/fa";
 import {
-  FaThumbsUp,
   FaCommentAlt,
   FaShare
 } from "react-icons/fa";
@@ -116,8 +115,9 @@ editPost(post) {
   
 }
 
-toggleLike = (postId, liked) => {
-  axios.post(`http://127.0.0.1:8000/likepost/${postId}`, { liked: !liked })
+toggleLike = (postId) => {
+  const user_id = localStorage.getItem("user_id");
+  axios.post(`http://127.0.0.1:8000/likepost/${postId}`, { user_id })
   .then((response) => {
     const{likes, liked: updatedLiked} = response.data;
     const updatedPosts = this.state.posts.map((post) => {
@@ -219,7 +219,7 @@ fetchComments = (postId) => {
 
             <div className="post-actions">
               <div className="post-action"  onClick={() => this.toggleLike(post.id, post.liked)}>
-                <FaThumbsUp className="post-icon" style={{ color: post.liked ? 'blue' : 'grey' }} /> {post.likes} Likes
+                <FaHeart className="post-icon" style={{ color: post.liked ? 'red' : 'grey' }} /> {post.likes} Likes
               </div>
 
 
