@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from socialapp.models import *
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
 
 @api_view(['POST'])
 def register_user(request):
@@ -240,3 +240,9 @@ def get_comments(request, post_id):
             }
         })
     return Response({'comments': comment_data})
+
+@api_view(['POST'])
+def logout_user(request):
+    logout(request)
+    return Response({'message': 'Logout successful'})
+
