@@ -1,6 +1,6 @@
 import Login from "./Components/Login";
 import Register from "./Components/Register";
-import { BrowserRouter as Router, Route, Routes, RouterProvider } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Sidebar from "./Components/Sidebar";
 import Stories from "./Components/Stories";
@@ -10,7 +10,7 @@ import Greeting from "./Components/Greeting";
 import './App.css';
 import Suggestions from "./Components/Suggestion";
 import CompleteRegistration from "./Components/CompleteRegistration";
-import ReelsPage from "./Components/Reels";
+import Reels from "./Components/Reels";
 
 function App() {
   return (
@@ -24,6 +24,7 @@ function App() {
           <Posts/> <Suggestions/>
           </div>} />
         <Route path="/completeregistration" element={<CompleteRegistration />} />
+        <Route path="/reels" element={<Reels/>}/>
       </Routes>
     </Router>
      
