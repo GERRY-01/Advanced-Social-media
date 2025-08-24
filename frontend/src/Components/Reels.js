@@ -9,6 +9,9 @@ import axios from "axios";
 const Reels = () => {
   const [menuOpen, setMenuOpen] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [opencomments, setOpencomments] = useState(null);
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     axios
@@ -43,6 +46,34 @@ const handletime =(timestamp)=> {
   const toggleMenu = (id) => {
     setMenuOpen(menuOpen === id ? null : id);
   };
+
+const submitcomment = (postid, comment) => {
+  const user_id = localStorage.getItem("user_id");
+  axios
+    .post(`http://127.0.0.1:8000/addcomment/${postid}`,  {comment, user_id}
+    )
+    .then((response) => {
+      console.log("Comment submitted successfully:", response.data);
+      setComment("");
+      setComments([...comments, response.data.comment]);
+    })
+    .catch((error) => {
+      console.error("Error submitting comment:", error);
+    });
+};
+
+//fetching all comments per post
+useEffect(() => {
+  if(!opencomments) return
+  axios
+    .get(`http://127.0.0.1:8000/getcomments/${opencomments}`)
+    .then((response) => {
+      setComments(response.data.comments);
+    })
+    .catch((error) => {
+      console.error("Error fetching comments:", error);
+    });
+},[opencomments]);
 
   return (
     <div className="reels-page">
@@ -86,12 +117,65 @@ const handletime =(timestamp)=> {
                   <FaHeart size={18} className="action-icon" /> {post.likes} Likes
                 </span>
                 <span>
-                  <FaComment size={18} className="action-icon" /> {post.comments} Comments
+                  <FaComment size={18} className="action-icon" onClick={() => setOpencomments(opencomments === post.id ? null : post.id)}/> {post.comments} Comments
                 </span>
                 <span>
                   <FaShare size={18} className="action-icon" /> {post.shares} Shares
                 </span>
               </div>
+
+
+ {/* Reels Comment section */}
+{opencomments === post.id && (
+  <div className="reels-comment-section">
+    <div className="reels-comments-header">
+      <span className="reels-comments-title">Comments</span>
+      <button
+        className="reels-close-btn"
+        onClick={() => setOpencomments(null)}
+      >
+        ✖
+      </button>
+    </div>
+
+   {/* Scrollable comments list */}
+<div className="reels-comments-list">
+  {comments.length > 0 ? (
+    comments.map((c) => (
+      <div className="comment" key={c.id}>
+        <img
+          src={c.user.profile_pic || "https://i.pravatar.cc/40"}
+          alt={c.user.username}
+          className="comment-pic"
+        />
+        <div className="comment-body">
+          <span className="comment-username">{c.user.username}</span>
+          <p className="comment-text">{c.comment}</p>
+        </div>
+      </div>
+    ))
+  ) : (
+    <p>No comments yet</p>
+  )}
+</div>
+
+
+    {/* Fixed input */}
+    <div className="reels-comment-input">
+      <input
+        type="text"
+        placeholder="Write a comment..."
+        className="reels-comment-textbox"
+        onChange={(e) => setComment(e.target.value)}
+      />
+      <button className="reels-send-btn" onClick={() => submitcomment(post.id,comment)}>➤</button>
+    </div>
+  </div>
+)}
+
+
+                
+
           </div>
         ))}
       </div>
