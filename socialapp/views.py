@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from socialapp.models import *
 from django.contrib.auth import authenticate, login,logout
+from django.shortcuts import get_object_or_404
 
 @api_view(['POST'])
 def register_user(request):
@@ -138,8 +139,11 @@ def create_post(request):
 @api_view(['GET'])
 def get_posts(request):
     posts = Posts.objects.all().order_by('-timestamp')
+    user_id = request.query_params.get('user_id')
+    user = User.objects.get(id=user_id) if user_id else None
     post_data = []
     for post in posts:
+        liked = Like.objects.filter(post=post, user=user).exists()
         post_data.append({
             'id': post.id,
             'caption': post.caption,
@@ -147,6 +151,7 @@ def get_posts(request):
             'video': request.build_absolute_uri(post.video.url) if post.video else None,
             'time': post.timestamp,
             'likes': post.likes,
+            'liked': liked,
             'comments': post.comments,
             'shares': post.shares,
             'user': {
@@ -183,18 +188,24 @@ def edit_post(request, post_id):
 @api_view(['POST'])
 def like_post(request, post_id):
    post = Posts.objects.get(id=post_id)
-   isliked = request.data.get('liked', False)
+   user_id = request.data.get('user_id')
+   user = User.objects.get(id=user_id)
+   like, created = Like.objects.get_or_create(post=post, user=user)
 
-   if isliked:
+   if created:
        post.likes += 1
+       post.save()
+       liked = True
    else:
        post.likes -= 1 if post.likes > 0 else 0
+       like.delete()
+       liked = False
 
    post.save()
 
    return Response({
        'likes': post.likes,
-       'liked': isliked
+       'liked': liked
    })
    
 
