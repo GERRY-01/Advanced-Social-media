@@ -195,6 +195,8 @@ fetchComments = (postId) => {
                 <span className="post-username">{post.user.username}</span>
                 <span className="post-time">{this.handletime(post.time)}</span>
               </div>
+                <span className="follow-btn" onClick={this.togglefollow}>follow</span>
+              
 
                     {/* Three dots button */}
                       <div className="post-menu-wrapper">
