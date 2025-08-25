@@ -124,7 +124,7 @@ const toggleLikes = (postid) => {
             </div>
 
             {/* Video */}
-              
+               <div className="post-caption">{post.caption}</div>
                 <video className="reel-video" controls>
                   <source src={post.video} type="video/mp4" />
                 </video>
