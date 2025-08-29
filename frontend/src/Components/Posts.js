@@ -23,6 +23,11 @@ class Posts extends Component {
       opencomments: null,
       comments: {},
       postComments: {},
+      followStatus: false,
+      myFollowing: 0,
+      myFollowers: 0,
+      userFollowing: 0,
+      userFollowers: 0,
     };
   }
 
@@ -179,6 +184,25 @@ fetchComments = (postId) => {
     });
 }
 
+togglefollow = (user_id) => {
+  const current_user_id = localStorage.getItem("user_id");
+  axios.post(`http://127.0.0.1:8000/follow/${user_id}`, { user_id: current_user_id })
+  .then((response) => {
+    const updatedPosts = this.state.posts.map((post) => {
+      if (post.user.id === user_id) {
+        return { ...post, user: { ...post.user, isFollowing: response.data.follow_status } };
+      }
+      return post;
+    });
+    this.setState({ posts: updatedPosts });
+  })
+  .catch((error) => {
+    console.error("Error toggling follow:", error);
+  });
+}
+
+
+
   render() { 
     const comments = this.state.comments
     return (
@@ -195,8 +219,9 @@ fetchComments = (postId) => {
                 <span className="post-username">{post.user.username}</span>
                 <span className="post-time">{this.handletime(post.time)}</span>
               </div>
-                <span className="follow-btn" onClick={this.togglefollow}>follow</span>
-              
+              {post.user.id !== parseInt(localStorage.getItem("user_id")) &&(
+                <span className="follow-span" onClick={() => this.togglefollow(post.user.id)}>  {post.user.isFollowing ? "Unfollow" : "Follow"}</span>
+              )}
 
                     {/* Three dots button */}
                       <div className="post-menu-wrapper">
