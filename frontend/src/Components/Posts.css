@@ -344,7 +344,21 @@
 .send-btn:hover {
   background: #0b5ed7;
 }
-
+/* Follow button */
+.follow-span {
+  color: blue;
+  font-weight: bold;
+  border: none;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+  margin-top: -2%;
+}
+.follow-span:hover {
+  color: #0056b3;
+  cursor: pointer;
+}
 
 
 /* Tablet/iPad */
