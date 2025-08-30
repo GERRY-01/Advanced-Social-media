@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa";
 import "./Sidebar.css";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 class Sidebar extends Component {
   constructor(props) {
@@ -80,10 +81,10 @@ class Sidebar extends Component {
             <FaRobot className="icon" />
             AI Chatbot
           </a>
-          <a href="#profile">
+          <Link to="/profile">
             <FaUser className="icon" />
             Profile
-          </a>
+          </Link>
           <a href="#settings">
             <FaCog className="icon" />
             Settings
