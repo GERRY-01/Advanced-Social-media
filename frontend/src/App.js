@@ -11,6 +11,7 @@ import './App.css';
 import Suggestions from "./Components/Suggestion";
 import CompleteRegistration from "./Components/CompleteRegistration";
 import Reels from "./Components/Reels";
+import Profile from "./Components/Profile";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           </div>} />
         <Route path="/completeregistration" element={<CompleteRegistration />} />
         <Route path="/reels" element={<Reels/>}/>
+        <Route path="/profile" element={<Profile/>}/>
       </Routes>
     </Router>
      
