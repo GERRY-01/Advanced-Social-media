@@ -24,7 +24,10 @@ class Login extends Component {
         axios.post("http://127.0.0.1:8000/login", {
             username: this.state.username,
             password: this.state.password
-        }).then(res => {
+        }, 
+            {withCredentials: true}
+        
+        ).then(res => {
             console.log(res.data);
             localStorage.setItem("user_id", res.data.user_id);
             this.setState({ success: "Login successful" });
